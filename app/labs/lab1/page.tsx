@@ -61,6 +61,7 @@ export default function Lab1() {
         <ul id="wd-your-books">
           <li>Twenty Thousand Leagues Under the Sea</li>
           <li>The Three-Body Problem</li>
+          <li>Journey to the Center of the Earth</li>
         </ul>
       </div>
       <div id="wd-tables">
@@ -87,7 +88,54 @@ export default function Lab1() {
               <td>2/10/21</td>
               <td>90</td>
             </tr>
-            <tr> ... </tr>
+            <tr>
+              <td>Q3</td>
+              <td>JavaScript</td>
+              <td>2/17/21</td>
+              <td>95</td>
+            </tr>
+            <tr>
+              <td>Q4</td>
+              <td>React</td>
+              <td>2/24/21</td>
+              <td>88</td>
+            </tr>
+            <tr>
+              <td>Q5</td>
+              <td>Node.js</td>
+              <td>3/3/21</td>
+              <td>92</td>
+            </tr>
+            <tr>
+              <td>Q6</td>
+              <td>MongoDB</td>
+              <td>3/10/21</td>
+              <td>87</td>
+            </tr>
+            <tr>
+              <td>Q7</td>
+              <td>REST APIs</td>
+              <td>3/17/21</td>
+              <td>94</td>
+            </tr>
+            <tr>
+              <td>Q8</td>
+              <td>Redux</td>
+              <td>3/24/21</td>
+              <td>91</td>
+            </tr>
+            <tr>
+              <td>Q9</td>
+              <td>Testing</td>
+              <td>3/31/21</td>
+              <td>89</td>
+            </tr>
+            <tr>
+              <td>Q10</td>
+              <td>Deployment</td>
+              <td>4/7/21</td>
+              <td>93</td>
+            </tr>
           </tbody>
           <tfoot>
             <tr>

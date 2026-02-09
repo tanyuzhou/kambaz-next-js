@@ -5,7 +5,7 @@ export default function CourseNavigation() {
       <Link href="/courses/1234/home" id="wd-course-home-link">Home</Link><br />
       <Link href="/courses/1234/modules" id="wd-course-modules-link">Modules
       </Link><br />
-      <Link href="/courses/1234/piazza" id="wd-course-piazza-link">Piazza</Link><br />
+      <a href="https://piazza.com/class/mju4yv9nultsp" id="wd-course-piazza-link" target="_blank">Piazza</a><br />
       <Link href="/courses/1234/zoom" id="wd-course-zoom-link">Zoom</Link><br />
       <Link href="/courses/1234/assignments" id="wd-course-assignments-link">
         Assignments</Link><br />
