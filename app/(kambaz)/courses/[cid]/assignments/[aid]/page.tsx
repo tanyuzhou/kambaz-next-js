@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import {
   Row,
@@ -9,20 +10,28 @@ import {
   Button,
   Card,
 } from "react-bootstrap";
+import { useParams } from "next/navigation";
+import * as db from "../../../../database";
 
 export default function AssignmentEditor() {
+  const { cid, aid } = useParams();
+  const assignment = db.assignments.find((a: any) => a._id === aid);
+
+  if (!assignment) {
+    return <h2>Assignment not found</h2>;
+  }
+
   return (
     <div id="wd-assignments-editor">
       <FormLabel htmlFor="wd-name">Assignment Name</FormLabel>
-      <FormControl id="wd-name" defaultValue="A1" className="mb-3" />
+      <FormControl id="wd-name" defaultValue={assignment.title} className="mb-3" />
 
       <Card className="p-3 mb-3">
         <p>
           The assignment is <span className="text-danger">available online</span>
         </p>
         <p>
-          Submit a link to the landing page of your Web application running on
-          Netlify.
+          {assignment.description}
         </p>
         <p>The landing page should include the following:</p>
         <ul>
@@ -46,7 +55,7 @@ export default function AssignmentEditor() {
           </FormLabel>
         </Col>
         <Col sm={9}>
-          <FormControl id="wd-points" type="number" defaultValue={100} />
+          <FormControl id="wd-points" type="number" defaultValue={assignment.points} />
         </Col>
       </Row>
 
@@ -139,7 +148,7 @@ export default function AssignmentEditor() {
             <FormControl
               type="datetime-local"
               id="wd-due-date"
-              defaultValue="2024-05-13T23:59"
+              defaultValue={assignment.dueDate}
               className="mb-3"
             />
 
@@ -151,7 +160,7 @@ export default function AssignmentEditor() {
                 <FormControl
                   type="datetime-local"
                   id="wd-available-from"
-                  defaultValue="2024-05-06T12:00"
+                  defaultValue={assignment.availableDate}
                 />
               </Col>
               <Col>
@@ -161,7 +170,7 @@ export default function AssignmentEditor() {
                 <FormControl
                   type="datetime-local"
                   id="wd-available-until"
-                  defaultValue="2024-05-20T12:00"
+                  defaultValue={assignment.dueDate} // Simplified: until = dueDate as often the case, or could just leave hardcoded
                 />
               </Col>
             </Row>
@@ -172,12 +181,17 @@ export default function AssignmentEditor() {
       <hr />
       <div className="text-end">
         <Link
-          href="/courses/1234/assignments"
+          href={`/courses/${cid}/assignments`}
           className="btn btn-secondary me-2"
         >
           Cancel
         </Link>
-        <Button variant="danger">Save</Button>
+        <Link
+          href={`/courses/${cid}/assignments`}
+          className="btn btn-danger"
+        >
+          Save
+        </Link>
       </div>
     </div>
   );

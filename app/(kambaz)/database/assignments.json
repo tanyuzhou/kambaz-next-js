@@ -1,0 +1,38 @@
+[
+    {
+        "_id": "A101",
+        "title": "A1 - ENV + HTML",
+        "course": "RS101",
+        "description": "Setting up the environment and learning basic HTML capabilities.",
+        "points": 100,
+        "dueDate": "2024-05-13T23:59:00",
+        "availableDate": "2024-05-06T12:00:00"
+    },
+    {
+        "_id": "A102",
+        "title": "A2 - CSS + BOOTSTRAP",
+        "course": "RS101",
+        "description": "Creating stylesheets and layout systems with Bootstrap.",
+        "points": 100,
+        "dueDate": "2024-05-20T23:59:00",
+        "availableDate": "2024-05-13T12:00:00"
+    },
+    {
+        "_id": "A103",
+        "title": "A3 - JAVASCRIPT + REACT",
+        "course": "RS101",
+        "description": "Learning JavaScript and building interactive React components.",
+        "points": 100,
+        "dueDate": "2024-05-27T23:59:00",
+        "availableDate": "2024-05-20T12:00:00"
+    },
+    {
+        "_id": "A201",
+        "title": "A1 - AERODYNAMICS",
+        "course": "RS102",
+        "description": "Learning aerodynamics.",
+        "points": 100,
+        "dueDate": "2024-05-13T23:59:00",
+        "availableDate": "2024-05-06T12:00:00"
+    }
+]

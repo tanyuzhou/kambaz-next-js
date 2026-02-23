@@ -1,0 +1,20 @@
+[
+    {
+        "_id": "RS101",
+        "name": "Rocket Propulsion",
+        "number": "RS101",
+        "startDate": "2024-01-10",
+        "endDate": "2024-05-15",
+        "image": "/images/reactjs.jpg",
+        "description": "The fundamentals of rocket propulsion."
+    },
+    {
+        "_id": "RS102",
+        "name": "Aerodynamics",
+        "number": "RS102",
+        "startDate": "2024-01-10",
+        "endDate": "2024-05-15",
+        "image": "/images/reactjs.jpg",
+        "description": "Aerodynamics of aerospace vehicles."
+    }
+]

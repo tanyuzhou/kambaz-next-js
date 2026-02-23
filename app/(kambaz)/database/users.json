@@ -1,0 +1,72 @@
+[
+    {
+        "_id": "123",
+        "loginId": "alice",
+        "firstName": "Alice",
+        "lastName": "Wonderland",
+        "section": "S101",
+        "role": "STUDENT",
+        "lastActivity": "2024-02-01",
+        "totalActivity": "10:32:00"
+    },
+    {
+        "_id": "234",
+        "loginId": "bob",
+        "firstName": "Bob",
+        "lastName": "Builder",
+        "section": "S101",
+        "role": "STUDENT",
+        "lastActivity": "2024-02-02",
+        "totalActivity": "12:15:00"
+    },
+    {
+        "_id": "345",
+        "loginId": "charlie",
+        "firstName": "Charlie",
+        "lastName": "Brown",
+        "section": "S101",
+        "role": "STUDENT",
+        "lastActivity": "2024-02-03",
+        "totalActivity": "05:10:00"
+    },
+    {
+        "_id": "456",
+        "loginId": "dan",
+        "firstName": "Dan",
+        "lastName": "Danger",
+        "section": "S101",
+        "role": "STUDENT",
+        "lastActivity": "2024-02-04",
+        "totalActivity": "22:00:00"
+    },
+    {
+        "_id": "567",
+        "loginId": "eve",
+        "firstName": "Eve",
+        "lastName": "Hacker",
+        "section": "S101",
+        "role": "STUDENT",
+        "lastActivity": "2024-02-05",
+        "totalActivity": "15:45:00"
+    },
+    {
+        "_id": "789",
+        "loginId": "frank",
+        "firstName": "Frank",
+        "lastName": "Sinatra",
+        "section": "S102",
+        "role": "STUDENT",
+        "lastActivity": "2024-02-06",
+        "totalActivity": "02:20:00"
+    },
+    {
+        "_id": "890",
+        "loginId": "grace",
+        "firstName": "Grace",
+        "lastName": "Hopper",
+        "section": "S102",
+        "role": "STUDENT",
+        "lastActivity": "2024-02-07",
+        "totalActivity": "18:05:00"
+    }
+]
