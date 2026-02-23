@@ -10,37 +10,10 @@ import {
   CardText,
   Button,
 } from "react-bootstrap";
+import * as db from "../database";
 
 export default function Dashboard() {
-  const courses = [
-    {
-      id: "1234",
-      name: "CS1234 React JS",
-      desc: "Full Stack software developer",
-    },
-    {
-      id: "1001",
-      name: "CS1001 Intro to Programming",
-      desc: "Learn the basics of programming",
-    },
-    {
-      id: "1002",
-      name: "CS1002 Data Structures",
-      desc: "Learn about data structures",
-    },
-    { id: "1003", name: "CS1003 Algorithms", desc: "Learn about algorithms" },
-    { id: "1004", name: "CS1004 Databases", desc: "Learn about databases" },
-    {
-      id: "1005",
-      name: "CS1005 Web Development",
-      desc: "Learn about web development",
-    },
-    {
-      id: "1006",
-      name: "CS1006 Operating Systems",
-      desc: "Learn about operating systems",
-    },
-  ];
+  const courses = db.courses;
 
   return (
     <div id="wd-dashboard">
@@ -57,20 +30,20 @@ export default function Dashboard() {
         xl={4}
         className="g-4"
       >
-        {courses.map((course) => (
+        {courses.map((course: any) => (
           <Col
-            key={course.id}
+            key={course._id}
             className="wd-dashboard-course"
             style={{ width: "300px" }}
           >
             <Card>
               <Link
-                href={`/courses/${course.id}/home`}
+                href={`/courses/${course._id}/home`}
                 className="wd-dashboard-course-link text-decoration-none text-dark"
               >
                 <CardImg
                   variant="top"
-                  src="/images/reactjs.jpg"
+                  src={course.image || "/images/reactjs.jpg"}
                   width="100%"
                   height={160}
                 />
@@ -78,8 +51,11 @@ export default function Dashboard() {
                   <CardTitle className="wd-dashboard-course-title">
                     {course.name}
                   </CardTitle>
-                  <CardText className="wd-dashboard-course-desc text-muted">
-                    {course.desc}
+                  <CardText
+                    className="wd-dashboard-course-desc text-muted"
+                    style={{ maxHeight: "100px", overflow: "hidden" }}
+                  >
+                    {course.description}
                   </CardText>
                   <Button variant="primary">Go</Button>
                 </CardBody>

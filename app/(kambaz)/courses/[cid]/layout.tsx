@@ -2,17 +2,20 @@ import { ReactNode } from "react";
 import { Row, Col } from "react-bootstrap";
 import CourseNavigation from "./Navigation";
 import { FaAlignJustify } from "react-icons/fa";
+import * as db from "../../database";
 
 export default async function CoursesLayout({
   children,
   params,
 }: Readonly<{ children: ReactNode; params: Promise<{ cid: string }> }>) {
   const { cid } = await params;
+  const course = db.courses.find((c: any) => c._id === cid);
+  const courseName = course ? course.name : `Course ${cid}`;
   return (
     <div id="wd-courses">
       <h2 className="text-danger">
         <FaAlignJustify className="me-4 fs-4 mb-1" />
-        Course {cid}
+        {courseName}
       </h2>
       <hr />
       <Row>
@@ -26,3 +29,4 @@ export default async function CoursesLayout({
     </div>
   );
 }
+
