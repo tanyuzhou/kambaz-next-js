@@ -2,17 +2,25 @@ import { ReactNode } from "react";
 import KambazNavigation from "./Navigation";
 import "./styles.css";
 
+import StoreProvider from "./StoreProvider";
+
 export default function KambazLayout({
   children,
-}: Readonly<{ children: ReactNode }>) {
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <div id="wd-kambaz">
-      <div className="d-flex">
-        <div>
-          <KambazNavigation />
+    <StoreProvider>
+      <div id="wd-kambaz">
+        <div className="d-flex">
+          <div className="d-none d-md-block bg-black">
+            <KambazNavigation />
+          </div>
+          <div className="wd-main-content-offset p-3 flex-fill">
+            {children}
+          </div>
         </div>
-        <div className="wd-main-content-offset p-3 flex-fill">{children}</div>
       </div>
-    </div>
+    </StoreProvider>
   );
 }

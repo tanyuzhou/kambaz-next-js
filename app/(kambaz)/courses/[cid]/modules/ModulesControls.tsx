@@ -8,19 +8,25 @@ import {
 } from "react-bootstrap";
 import { FaPlus } from "react-icons/fa6";
 import GreenCheckmark from "./GreenCheckmark";
+import ModuleEditor from "./ModuleEditor";
 
-export default function ModulesControls() {
+export default function ModulesControls({
+  moduleName,
+  setModuleName,
+  addModule,
+}: {
+  moduleName: string;
+  setModuleName: (title: string) => void;
+  addModule: () => void;
+}) {
   return (
     <div id="wd-modules-controls" className="text-nowrap">
-      <Button
-        variant="danger"
-        size="lg"
-        className="me-1 float-end"
-        id="wd-add-module-btn"
-      >
-        <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} />
-        Module
-      </Button>
+      <ModuleEditor
+        dialogTitle="Add Module"
+        moduleName={moduleName}
+        setModuleName={setModuleName}
+        addModule={addModule}
+      />
       <Dropdown className="float-end me-2">
         <DropdownToggle variant="secondary" size="lg" id="wd-publish-all-btn">
           <GreenCheckmark /> Publish All

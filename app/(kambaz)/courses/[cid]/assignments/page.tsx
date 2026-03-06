@@ -12,11 +12,14 @@ import { FaSearch, FaEdit } from "react-icons/fa";
 import { IoEllipsisVertical } from "react-icons/io5";
 import GreenCheckmark from "../modules/GreenCheckmark";
 import { useParams } from "next/navigation";
-import * as db from "../../../database";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteAssignment } from "./assignmentsReducer";
+import { FaTrash } from "react-icons/fa";
 
 export default function Assignments() {
   const { cid } = useParams();
-  const assignments = db.assignments;
+  const { assignments } = useSelector((state: any) => state.assignmentsReducer);
+  const dispatch = useDispatch();
   return (
     <div id="wd-assignments">
       <div className="d-flex mb-3">
@@ -37,9 +40,13 @@ export default function Assignments() {
           >
             <BsPlus className="fs-5" /> Group
           </Button>
-          <Button variant="danger" id="wd-add-assignment">
+          <Link
+            href={`/courses/${cid}/assignments/new`}
+            className="btn btn-danger"
+            id="wd-add-assignment"
+          >
             <BsPlus className="fs-5" /> Assignment
-          </Button>
+          </Link>
         </div>
       </div>
       <ListGroup className="rounded-0" id="wd-assignment-list">
@@ -78,6 +85,10 @@ export default function Assignments() {
                     </span>
                   </div>
                   <div className="ms-auto">
+                    <FaTrash
+                      className="text-danger me-2 mb-1"
+                      onClick={() => dispatch(deleteAssignment(assignment._id))}
+                    />
                     <GreenCheckmark />
                     <IoEllipsisVertical className="fs-4" />
                   </div>

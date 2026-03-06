@@ -10,29 +10,69 @@ import {
   Button,
   Card,
 } from "react-bootstrap";
-import { useParams } from "next/navigation";
-import * as db from "../../../../database";
+import { useParams, useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import { addAssignment, updateAssignment } from "../assignmentsReducer";
+import { useState } from "react";
 
 export default function AssignmentEditor() {
   const { cid, aid } = useParams();
-  const assignment: any = db.assignments.find((a: any) => a._id === aid);
+  const router = useRouter();
+  const dispatch = useDispatch();
 
-  if (!assignment) {
-    return <h2>Assignment not found</h2>;
-  }
+  const { assignments } = useSelector((state: any) => state.assignmentsReducer);
+  const existingAssignment =
+    aid !== "new" ? assignments.find((a: any) => a._id === aid) : null;
+
+  const [assignment, setAssignment] = useState<any>(
+    existingAssignment || {
+      title: "New Assignment",
+      description: "New Assignment Description",
+      points: 100,
+      dueDate: "2024-05-13T23:59",
+      availableDate: "2024-05-06T00:00",
+      course: cid,
+    }
+  );
+
+  const handleSave = () => {
+    if (aid === "new") {
+      dispatch(addAssignment(assignment));
+    } else {
+      dispatch(updateAssignment(assignment));
+    }
+    router.push(`/courses/${cid}/assignments`);
+  };
 
   return (
     <div id="wd-assignments-editor">
       <FormLabel htmlFor="wd-name">Assignment Name</FormLabel>
-      <FormControl id="wd-name" defaultValue={assignment.title} className="mb-3" />
+      <FormControl
+        id="wd-name"
+        defaultValue={assignment.title}
+        onChange={(e) =>
+          setAssignment({ ...assignment, title: e.target.value })
+        }
+        className="mb-3"
+      />
 
       <Card className="p-3 mb-3">
         <p>
           The assignment is <span className="text-danger">available online</span>
         </p>
         <p>
-          {assignment.description || "No description available."}
+          The assignment is <span className="text-danger">available online</span>
         </p>
+        <FormControl
+          as="textarea"
+          rows={3}
+          id="wd-description"
+          defaultValue={assignment.description}
+          onChange={(e) =>
+            setAssignment({ ...assignment, description: e.target.value })
+          }
+          className="mb-3"
+        />
         <p>The landing page should include the following:</p>
         <ul>
           <li>Your full name and section</li>
@@ -55,7 +95,14 @@ export default function AssignmentEditor() {
           </FormLabel>
         </Col>
         <Col sm={9}>
-          <FormControl id="wd-points" type="number" defaultValue={assignment.points || 100} />
+          <FormControl
+            id="wd-points"
+            type="number"
+            defaultValue={assignment.points}
+            onChange={(e) =>
+              setAssignment({ ...assignment, points: parseInt(e.target.value) })
+            }
+          />
         </Col>
       </Row>
 
@@ -148,7 +195,10 @@ export default function AssignmentEditor() {
             <FormControl
               type="datetime-local"
               id="wd-due-date"
-              defaultValue={assignment.dueDate || "2024-05-13T23:59"}
+              defaultValue={assignment.dueDate}
+              onChange={(e) =>
+                setAssignment({ ...assignment, dueDate: e.target.value })
+              }
               className="mb-3"
             />
 
@@ -160,7 +210,13 @@ export default function AssignmentEditor() {
                 <FormControl
                   type="datetime-local"
                   id="wd-available-from"
-                  defaultValue={assignment.availableDate || "2024-05-06T00:00"}
+                  defaultValue={assignment.availableDate}
+                  onChange={(e) =>
+                    setAssignment({
+                      ...assignment,
+                      availableDate: e.target.value,
+                    })
+                  }
                 />
               </Col>
               <Col>
@@ -186,12 +242,9 @@ export default function AssignmentEditor() {
         >
           Cancel
         </Link>
-        <Link
-          href={`/courses/${cid}/assignments`}
-          className="btn btn-danger"
-        >
+        <Button onClick={handleSave} className="btn-danger">
           Save
-        </Link>
+        </Button>
       </div>
     </div>
   );
