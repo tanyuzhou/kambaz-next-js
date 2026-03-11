@@ -2,14 +2,17 @@
 import Link from "next/link";
 import { FormControl, Button } from "react-bootstrap";
 import { useDispatch } from "react-redux";
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import * as db from "../../database";
 import { setCurrentUser } from "../accountReducer";
-import { redirect } from "next/navigation";
+import { redirect, useSearchParams } from "next/navigation";
 
-export default function Signin() {
-  const [credentials, setCredentials] = useState<any>({});
-  const [error, setError] = useState<string | null>(null);
+function SigninForm() {
+  const searchParams = useSearchParams();
+  const [credentials, setCredentials] = useState<any>({ username: "ada", password: "123" });
+  const [error, setError] = useState<string | null>(
+    searchParams.get("error") === "not_logged_in" ? "Please log in to continue." : null
+  );
   const dispatch = useDispatch();
 
   const signin = () => {
@@ -60,5 +63,13 @@ export default function Signin() {
         Signup
       </Link>
     </div>
+  );
+}
+
+export default function Signin() {
+  return (
+    <Suspense fallback={<div>Loading Signin...</div>}>
+      <SigninForm />
+    </Suspense>
   );
 }
