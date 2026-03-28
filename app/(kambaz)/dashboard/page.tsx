@@ -11,10 +11,11 @@ import {
   Button,
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { addCourse, deleteCourse, updateCourse } from "../courses/coursesReducer";
-import { enrollCourse, unenrollCourse } from "../courses/enrollmentsReducer";
-import { useState } from "react";
-import * as db from "../database";
+import { addCourse, deleteCourse, updateCourse, setCourses } from "../courses/coursesReducer";
+import { enrollCourse, unenrollCourse, setEnrollments } from "../courses/enrollmentsReducer";
+import { useState, useEffect } from "react";
+import * as courseClient from "../courses/client";
+import * as enrollmentClient from "../courses/enrollmentsClient";
 
 export default function Dashboard() {
   const { courses } = useSelector((state: any) => state.coursesReducer);
@@ -33,6 +34,49 @@ export default function Dashboard() {
     description: "New Description",
   });
 
+  const fetchCourses = async () => {
+    try {
+      const fetchedCourses = await courseClient.fetchAllCourses();
+      dispatch(setCourses(fetchedCourses));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const fetchEnrollments = async () => {
+    try {
+      const fetchedEnrollments = await enrollmentClient.fetchAllEnrollments();
+      dispatch(setEnrollments(fetchedEnrollments));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCourses();
+    fetchEnrollments();
+  }, []);
+
+  const addNewCourse = async () => {
+    const newCourse = await courseClient.createCourse(course);
+    dispatch(addCourse(newCourse));
+  };
+  const deleteCourseItem = async (courseId: string) => {
+    await courseClient.deleteCourse(courseId);
+    dispatch(deleteCourse(courseId));
+  };
+  const updateCourseItem = async () => {
+    await courseClient.updateCourse(course);
+    dispatch(updateCourse(course));
+  };
+  const enroll = async (courseId: string) => {
+    const newEnrollment = await enrollmentClient.enrollUserInCourse(currentUser._id, courseId);
+    dispatch(enrollCourse(newEnrollment));
+  };
+  const unenroll = async (courseId: string) => {
+    await enrollmentClient.unenrollUserFromCourse(currentUser._id, courseId);
+    dispatch(unenrollCourse({ user: currentUser._id, course: courseId }));
+  };
+
   return (
     <div id="wd-dashboard">
       <h1 id="wd-dashboard-title">Dashboard</h1>
@@ -45,12 +89,12 @@ export default function Dashboard() {
               <h5>New Course
                 <button className="btn btn-primary float-end"
                   id="wd-add-new-course-click"
-                  onClick={() => dispatch(addCourse(course))}>
+                  onClick={addNewCourse}>
                   Add
                 </button>
                 <button className="btn btn-warning float-end me-2"
                   id="wd-update-course-click"
-                  onClick={() => dispatch(updateCourse(course))}>
+                  onClick={updateCourseItem}>
                   Update
                 </button>
               </h5>
@@ -138,9 +182,9 @@ export default function Dashboard() {
                                   onClick={(e) => {
                                     e.preventDefault();
                                     if (isEnrolled) {
-                                      dispatch(unenrollCourse({ user: currentUser._id, course: course._id }));
+                                      unenroll(course._id);
                                     } else {
-                                      dispatch(enrollCourse({ user: currentUser._id, course: course._id }));
+                                      enroll(course._id);
                                     }
                                   }}
                                 >
@@ -152,7 +196,7 @@ export default function Dashboard() {
                                   <Button variant="danger" id="wd-delete-course-click"
                                     onClick={(e) => {
                                       e.preventDefault();
-                                      dispatch(deleteCourse(course._id));
+                                      deleteCourseItem(course._id);
                                     }}>
                                     Delete
                                   </Button>

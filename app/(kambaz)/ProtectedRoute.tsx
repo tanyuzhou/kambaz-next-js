@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { usePathname, redirect } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function ProtectedRoute({
     children,
@@ -10,11 +10,23 @@ export default function ProtectedRoute({
 }) {
     const { currentUser } = useSelector((state: any) => state.accountReducer);
     const pathname = usePathname();
+    const router = useRouter();
     const [isClient, setIsClient] = useState(false);
 
     useEffect(() => {
         setIsClient(true);
     }, []);
+
+    useEffect(() => {
+        if (
+            isClient &&
+            !currentUser &&
+            !pathname.includes("/account/signin") &&
+            !pathname.includes("/account/signup")
+        ) {
+            router.push("/account/signin?error=not_logged_in");
+        }
+    }, [isClient, currentUser, pathname, router]);
 
     if (!isClient) return null;
 
@@ -23,7 +35,7 @@ export default function ProtectedRoute({
         !pathname.includes("/account/signin") &&
         !pathname.includes("/account/signup")
     ) {
-        redirect("/account/signin?error=not_logged_in");
+        return null;
     }
 
     return <>{children}</>;

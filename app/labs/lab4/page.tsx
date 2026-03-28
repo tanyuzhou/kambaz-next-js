@@ -6,6 +6,7 @@ import BooleanStateVariables from "./components/BooleanStateVariables";
 import StringStateVariables from "./components/StringStateVariables";
 import DateStateVariable from "./components/DateStateVariable";
 import ObjectStateVariable from "./components/ObjectStateVariable";
+import ClickEvent from "./ClickEvent";
 import EventObjects from "./components/EventObjects";
 import PassingDataOnEvent from "./components/PassingDataOnEvent";
 import PassingFunctions from "./components/PassingFunctions";
@@ -26,6 +27,7 @@ export default function Lab4() {
             <div className="row">
                 <div className="col-12">
                     <h4>4.2 Managing State and User Input with Forms</h4>
+                    <ClickEvent />
                     <EventObjects />
                     <PassingDataOnEvent />
                     <PassingFunctions theFunction={TheFunctionExample} />

@@ -12,14 +12,35 @@ import { FaSearch, FaEdit } from "react-icons/fa";
 import { IoEllipsisVertical } from "react-icons/io5";
 import GreenCheckmark from "../modules/GreenCheckmark";
 import { useParams } from "next/navigation";
+import { deleteAssignment, setAssignments } from "./assignmentsReducer";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteAssignment } from "./assignmentsReducer";
 import { FaTrash } from "react-icons/fa";
+import { useEffect } from "react";
+import * as coursesClient from "../../client";
+import * as assignmentsClient from "./client";
 
 export default function Assignments() {
   const { cid } = useParams();
   const { assignments } = useSelector((state: any) => state.assignmentsReducer);
   const dispatch = useDispatch();
+  
+  const fetchAssignments = async () => {
+    try {
+      const fetchedAssignments = await coursesClient.findAssignmentsForCourse(cid as string);
+      dispatch(setAssignments(fetchedAssignments));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAssignments();
+  }, []);
+
+  const removeAssignment = async (assignmentId: string) => {
+    await assignmentsClient.deleteAssignment(assignmentId);
+    dispatch(deleteAssignment(assignmentId));
+  };
   return (
     <div id="wd-assignments">
       <div className="d-flex mb-3">
@@ -87,7 +108,7 @@ export default function Assignments() {
                   <div className="ms-auto">
                     <FaTrash
                       className="text-danger me-2 mb-1"
-                      onClick={() => dispatch(deleteAssignment(assignment._id))}
+                      onClick={() => removeAssignment(assignment._id)}
                     />
                     <GreenCheckmark />
                     <IoEllipsisVertical className="fs-4" />

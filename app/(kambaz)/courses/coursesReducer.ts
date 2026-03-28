@@ -1,8 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { courses } from "../database";
-
 const initialState = {
-    courses: courses,
+    courses: [],
 };
 
 const coursesSlice = createSlice({
@@ -10,12 +8,7 @@ const coursesSlice = createSlice({
     initialState,
     reducers: {
         addCourse: (state, { payload: course }) => {
-            const newCourse: any = {
-                ...course,
-                _id: new Date().getTime().toString(),
-                image: "/images/reactjs.jpg",
-            };
-            state.courses = [...state.courses, newCourse] as any;
+            state.courses = [...state.courses, course] as any;
         },
         deleteCourse: (state, { payload: courseId }) => {
             state.courses = state.courses.filter(

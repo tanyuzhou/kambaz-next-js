@@ -3,9 +3,9 @@ import Link from "next/link";
 import { FormControl, Button } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { useState, Suspense } from "react";
-import * as db from "../../database";
+import * as client from "../client";
 import { setCurrentUser } from "../accountReducer";
-import { redirect, useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 
 function SigninForm() {
   const searchParams = useSearchParams();
@@ -13,20 +13,17 @@ function SigninForm() {
   const [error, setError] = useState<string | null>(
     searchParams.get("error") === "not_logged_in" ? "Please log in to continue." : null
   );
+  const router = useRouter();
   const dispatch = useDispatch();
 
-  const signin = () => {
-    const user = db.users.find(
-      (u: any) =>
-        u.username === credentials.username &&
-        u.password === credentials.password
-    );
-    if (!user) {
-      setError("Incorrect username or password. Please try again.");
-      return;
+  const signin = async () => {
+    try {
+      const user = await client.signin(credentials);
+      dispatch(setCurrentUser(user));
+      router.push("/dashboard");
+    } catch (err: any) {
+      setError(err.response?.data?.message || err.message);
     }
-    dispatch(setCurrentUser(user));
-    redirect("/dashboard");
   };
 
   return (

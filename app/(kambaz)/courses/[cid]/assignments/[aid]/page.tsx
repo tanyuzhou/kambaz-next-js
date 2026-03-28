@@ -11,9 +11,11 @@ import {
   Card,
 } from "react-bootstrap";
 import { useParams, useRouter } from "next/navigation";
-import { useDispatch, useSelector } from "react-redux";
 import { addAssignment, updateAssignment } from "../assignmentsReducer";
+import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
+import * as coursesClient from "../../../client";
+import * as assignmentsClient from "../client";
 
 export default function AssignmentEditor() {
   const { cid, aid } = useParams();
@@ -35,10 +37,12 @@ export default function AssignmentEditor() {
     }
   );
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (aid === "new") {
-      dispatch(addAssignment(assignment));
+      const newAssignment = await coursesClient.createAssignmentForCourse(cid as string, assignment);
+      dispatch(addAssignment(newAssignment));
     } else {
+      await assignmentsClient.updateAssignment(assignment);
       dispatch(updateAssignment(assignment));
     }
     router.push(`/courses/${cid}/assignments`);
