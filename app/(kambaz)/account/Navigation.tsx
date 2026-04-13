@@ -6,6 +6,9 @@ import { useSelector } from "react-redux";
 export default function AccountNavigation() {
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const links = currentUser ? ["profile"] : ["signin", "signup"];
+  if (currentUser && currentUser.role === "ADMIN") {
+    links.push("users");
+  }
   const pathname = usePathname();
 
   return (

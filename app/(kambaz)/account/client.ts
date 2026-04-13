@@ -26,3 +26,15 @@ export const updateUser = async (user: any) => {
   const response = await api.put(`${USERS_API}/${user._id}`, user);
   return response.data;
 };
+export const findAllUsers = async () => {
+  const response = await api.get(USERS_API);
+  return response.data;
+};
+export const findUsersByRole = async (role: string) => {
+  const response = await api.get(`${USERS_API}?role=${role}`);
+  return response.data;
+};
+export const deleteUser = async (userId: string) => {
+  const response = await api.delete(`${USERS_API}/${userId}`);
+  return response.data;
+};

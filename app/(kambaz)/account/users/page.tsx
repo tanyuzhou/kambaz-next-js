@@ -1,36 +1,64 @@
 "use client";
-import { Table, Offcanvas, Form, Button } from "react-bootstrap";
+import { Table, Form, Button, Row, Col, Offcanvas } from "react-bootstrap";
 import { FaUserCircle, FaCheck } from "react-icons/fa";
 import { FaPencil } from "react-icons/fa6";
 import { IoMdClose } from "react-icons/io";
-import { useParams } from "next/navigation";
 import { useState, useEffect } from "react";
-import * as userClient from "../../../../account/client";
-import * as enrollmentClient from "../../../enrollmentsClient";
+import * as client from "../client";
 
-export default function PeopleTable() {
-  const { cid } = useParams();
+export default function Users() {
   const [users, setUsers] = useState<any[]>([]);
-  const [enrollments, setEnrollments] = useState<any[]>([]);
-
+  const [role, setRole] = useState<string>("");
+  const [nameFilter, setNameFilter] = useState<string>("");
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [show, setShow] = useState(false);
   const [editing, setEditing] = useState(false);
 
-  const fetchData = async () => {
+  const fetchUsers = async () => {
     try {
-      const fetchedUsers = await userClient.findAllUsers();
-      const fetchedEnrollments = await enrollmentClient.fetchAllEnrollments();
-      setUsers(fetchedUsers);
-      setEnrollments(fetchedEnrollments);
+      if (role) {
+        const users = await client.findUsersByRole(role);
+        setUsers(users);
+      } else {
+        const users = await client.findAllUsers();
+        setUsers(users);
+      }
     } catch (error) {
       console.error(error);
     }
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    fetchUsers();
+  }, [role]);
+
+  const handleCreateUser = async () => {
+    const newUser = {
+      username: `newuser${Date.now()}`,
+      password: "123",
+      firstName: "New",
+      lastName: "User",
+      loginId: "001234561S",
+      section: "S101",
+      role: "STUDENT",
+      lastActivity: "2020-10-01",
+      totalActivity: "10:21:32"
+    };
+    const user = await client.signup(newUser);
+    setUsers([...users, user]);
+  };
+
+  const handleUpdate = async () => {
+    await client.updateUser(selectedUser);
+    setUsers(users.map(u => u._id === selectedUser._id ? selectedUser : u));
+    setEditing(false);
+  };
+
+  const handleDelete = async () => {
+    await client.deleteUser(selectedUser._id);
+    setUsers(users.filter(u => u._id !== selectedUser._id));
+    setShow(false);
+  };
 
   const openDetails = (user: any) => {
     setSelectedUser(user);
@@ -40,22 +68,33 @@ export default function PeopleTable() {
 
   const handleClose = () => setShow(false);
 
-  const handleUpdate = async () => {
-    await userClient.updateUser(selectedUser);
-    setUsers(users.map(u => u._id === selectedUser._id ? selectedUser : u));
-    setEditing(false);
-  };
-
-  const handleDelete = async () => {
-    // Actually you should unenroll or delete user, but rubric says "Clicking Delete removes user from Database"
-    await userClient.deleteUser(selectedUser._id);
-    setUsers(users.filter(u => u._id !== selectedUser._id));
-    setShow(false);
-  };
-
   return (
-    <div id="wd-people-table">
-      <Table striped>
+    <div id="wd-users-screen">
+      <Row className="mb-3 align-items-center">
+        <Col md={3}>
+          <Form.Select value={role} onChange={(e) => setRole(e.target.value)}>
+            <option value="">All Roles</option>
+            <option value="STUDENT">Students</option>
+            <option value="TA">Assistants</option>
+            <option value="FACULTY">Faculty</option>
+            <option value="ADMIN">Admin</option>
+          </Form.Select>
+        </Col>
+        <Col md={3}>
+          <Form.Control
+            placeholder="Search people"
+            value={nameFilter}
+            onChange={(e) => setNameFilter(e.target.value)}
+          />
+        </Col>
+        <Col>
+          <Button variant="danger" className="float-end" onClick={handleCreateUser}>
+            + People
+          </Button>
+        </Col>
+      </Row>
+
+      <Table striped hover>
         <thead>
           <tr>
             <th>Name</th>
@@ -68,17 +107,21 @@ export default function PeopleTable() {
         </thead>
         <tbody>
           {users
-            .filter((usr: any) =>
-              enrollments.some((enrollment: any) => enrollment.user === usr._id && enrollment.course === cid)
-            )
+            .filter((user) => {
+              if (nameFilter) {
+                const fullName = `${user.firstName} ${user.lastName}`.toLowerCase();
+                return fullName.includes(nameFilter.toLowerCase());
+              }
+              return true;
+            })
             .map((user: any) => (
-              <tr key={user._id} onClick={() => openDetails(user)} style={{ cursor: "pointer" }}>
+              <tr key={user._id} onClick={() => openDetails(user)} style={{ cursor: 'pointer' }}>
                 <td className="wd-full-name text-nowrap text-danger">
-                  <FaUserCircle className="me-2 fs-1 text-secondary" />
+                  <FaUserCircle className="me-2 fs-4 text-secondary" />
                   <span className="wd-first-name">{user.firstName}</span>{" "}
                   <span className="wd-last-name">{user.lastName}</span>
                 </td>
-                <td className="wd-login-id">{user.loginId}</td>
+                <td className="wd-login-id">{user.loginId || "001234561S"}</td>
                 <td className="wd-section">{user.section || "S101"}</td>
                 <td className="wd-role">{user.role}</td>
                 <td className="wd-last-activity">{user.lastActivity || "2020-10-01"}</td>
@@ -101,7 +144,7 @@ export default function PeopleTable() {
             <>
               <div className="d-flex justify-content-between align-items-center mb-3">
                 <h2 className="text-danger m-0">{selectedUser.firstName} {selectedUser.lastName}</h2>
-                <FaPencil className="text-danger fs-4 cursor-pointer" style={{ cursor: "pointer" }} onClick={() => setEditing(true)} />
+                <FaPencil className="text-danger fs-4 cursor-pointer" style={{cursor: "pointer"}} onClick={() => setEditing(true)} />
               </div>
             </>
           )}

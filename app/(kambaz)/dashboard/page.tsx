@@ -114,7 +114,7 @@ export default function Dashboard() {
                 className="float-end"
                 variant="primary"
               >
-                {enrolling ? "Dashboards" : "Enrollments"}
+                {enrolling ? "My Courses" : "All Courses"}
               </Button>
             )}
           </h2>
